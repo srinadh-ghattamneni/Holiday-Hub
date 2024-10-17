@@ -1,37 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WanderLust</title>
-  </head>
+<% layout("/layouts/boilerplate") %>
+
   <body>
-    <h3>Create a New Listing</h3>
-    <form method="POST" action="/listings">
-      <input name="listing[title]" placeholder="enter title" type="text" />
-      <br /><br />
-      <textarea
-        name="listing[description]"
-        placeholder="enter description"
-      ></textarea>
-      <br /><br />
-      <input
-        name="listing[image]"
-        placeholder="enter image URL/Link"
-        type="text"
-      />
-      <br /><br />
-      <input name="listing[price]" placeholder="enter price" type="number" />
-      <br /><br />
-      <input name="listing[country]" placeholder="enter country" type="text" />
-      <br /><br />
-      <input
-        name="listing[location]"
-        placeholder="enter location"
-        type="text"
-      />
-      <br /><br />
-      <button>Add</button>
-    </form>
+    <div class="row">
+      <div class="col-8 offset-2">
+
+
+        <h1 class="mt-3">Create a New Listing</h1>
+        <form method="POST" action="/listings" novalidate class="needs-validation">
+
+          <div class="mb-4 mt-2">
+            <label for="title" class="form-label">Title</label>
+            <input name="listing[title]" placeholder="Enter a catchy title" type="text" class="form-control" required />
+
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+
+            <div class="invalid-feedback">
+              Please Enter a Title!
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="listing[description]" class="form-control" placeholder="Enter some description"
+              required></textarea>
+
+
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+
+            <div class="invalid-feedback">
+              Please enter a short description!
+            </div>
+          </div>
+
+          
+          <div class="mb-4">
+            <label for="image" class="form-label">Image URL</label>
+            <input name="listing[image][url]" placeholder="Enter image url" type="text" class="form-control"  />
+          </div>
+          
+
+          <div class="mb-4">
+            <label for="price" class="form-label">Price</label>
+            <input name="listing[price]" placeholder="Enter price" type="text" class="form-control" required />
+
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+
+            <div class="invalid-feedback">
+              Price should be valid!
+            </div>
+
+          </div>
+
+          <div class="mb-4">
+            <label for="country" class="form-label">Country</label>
+            <input name="listing[country]" placeholder="Enter country" type="text" class="form-control" required />
+
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+
+            <div class="invalid-feedback">
+              Coutry should be valid!
+            </div>
+          </div>
+
+
+          <div class="mb-4">
+            <label for="location" class="form-label">Location</label>
+            <input name="listing[location]" placeholder="Enter location" type="text" class="form-control" required />
+
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+
+            <div class="invalid-feedback">
+              Location should be valid!
+            </div>
+          </div>
+          <button class="btn btn-dark mb-3 add-btn ">Add</button>
+        </form>
+
+
+      </div>
+    </div>
+
   </body>
-</html>
