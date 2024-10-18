@@ -70,7 +70,7 @@ justify-content: center;
 
 /* cards */
 
-.cards{
+.listing-card{
   border:none !important;
   margin-bottom:2rem;
 }
@@ -195,20 +195,3 @@ justify-content: center;
 
 
 /* search */
-/* Search */
-.search {
-  display: flex; /* Ensures input and button are in a row */
-  justify-content: flex-start; /* Aligns the elements to the left */
-  align-items: center; /* Vertically centers the elements */
-  width: 100%; /* Ensures the search form uses full available width */
-}
-
-.search input.form-control {
-  flex: 1; /* Takes available space for the input */
-  margin-right: 10px; /* Adds space between input and button */
-}
-
-.search button.btn {
-  flex-shrink: 0; /* Prevents the button from shrinking */
-  height: 38px; /* Ensures the button height matches the input field height */
-}
