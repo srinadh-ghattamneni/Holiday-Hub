@@ -32,6 +32,11 @@ router.get("/", wrapAsync(async (req, res) => {
   router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id).populate("reviews");  
+    if(!listing)
+    {
+      req.flash("error","The Listing you requested for does not exist !");
+      res.redirect("/listings");
+    }
     res.render("listings/show.ejs", { listing });
   }));
   
@@ -50,6 +55,7 @@ router.get("/", wrapAsync(async (req, res) => {
     listing.image.filename = "listingimage";  // Set the filename directly
     const newListing = new Listing(listing);
     await newListing.save();
+    req.flash("success","New listing Created Successfully!");
     res.redirect("/listings");
   
   
@@ -61,6 +67,11 @@ router.get("/", wrapAsync(async (req, res) => {
   router.get("/:id/edit", wrapAsync(async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
+    if(!listing)
+      {
+        req.flash("error","The Listing you requested for does not exist !");
+        res.redirect("/listings");
+      }
     res.render("listings/edit.ejs", { listing });
   }));
   
@@ -78,6 +89,7 @@ router.get("/", wrapAsync(async (req, res) => {
     const { listing } = req.body;
     listing.image.filename = "listingimage";  // Set the filename directly
     await Listing.findByIdAndUpdate(id, { ...listing });
+    req.flash("success", "Listing Updated Successfully !")
     res.redirect(`/listings/${id}`);
   }));
   
@@ -87,6 +99,7 @@ router.get("/", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
+    req.flash("success","Listing Deleted Successfully!");
     res.redirect("/listings");
   }));
 
