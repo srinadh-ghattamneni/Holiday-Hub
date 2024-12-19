@@ -35,12 +35,13 @@ router.get("/", wrapAsync(async (req, res) => {
   // Show Route without reviews
   router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id).populate("reviews");  
+    const listing = await Listing.findById(id).populate("reviews").populate("owner");  
     if(!listing)
     {
       req.flash("error","The Listing you requested for does not exist !");
       res.redirect("/listings");
     }
+    console.log(listing);
     res.render("listings/show.ejs", { listing });
   }));
   
@@ -58,6 +59,7 @@ router.get("/", wrapAsync(async (req, res) => {
     const { listing } = req.body;
     listing.image.filename = "listingimage";  // Set the filename directly
     const newListing = new Listing(listing);
+    newListing.owner=req.user._id;
     await newListing.save();
     req.flash("success","New listing Created Successfully!");
     res.redirect("/listings");
