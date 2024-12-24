@@ -31,19 +31,31 @@
       <br>
       <br>
 
+
+      <%   if (currUser && currUser._id.equals(listing.owner._id))  {   %>
+
       <div class="btns  mb-3">
-        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark edit-btn col-1 offset-3">Edit</a>
+        <a href="/listings/<%= listing._id %>/edit" 
+          class="btn btn-dark edit-btn col-1 offset-3">Edit</a>
 
 
         <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
           <button class="btn btn-dark offset-5">Delete</button>
         </form>
       </div>
+      
+
+        <%  }    %>
+
+
+
 
       <!-- reviews -->
+      
       <hr>
+      <% if(currUser) { %>
       <h4>Leave a Review</h4>
-
+    
       <form class="mb-1 mt-1 needs-validation" action="/listings/<%= listing.id %>/reviews" method="POST" novalidate>
         <div class="mb-3">
           <label for="rating" class="form-label">Rating</label>
@@ -57,7 +69,9 @@
         </div>
         <button class="btn btn-outline-dark mb-3">Submit</button>
       </form>
+      <% } %>
 
+      
       <!-- all reviews -->
        <div class="reviews-div mb-3">
        <h4> All Reviews</h4>
@@ -68,7 +82,8 @@
       <% for(review of listing.reviews) { %>
         <div class="card col-5 ms-3 mb-3"> 
           <div class="card-body">
-            <h5 class="card-title">Review</h5>
+            <h5 class="card-title">
+              <b>@<%= review.author.username %></b></h5>
             
             <p class="card-text"><%= review.comment %></p>
             <p class="card-text"><%= review.rating %> stars</p>

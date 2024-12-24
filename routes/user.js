@@ -44,6 +44,7 @@ router.post("/login", saveRedirectUrl, passport.authenticate("local", {
     }), async (req, res) => {
         req.flash("success", "You are logged in!");
         const redirectUrl = res.locals.redirectUrl || "/listings"; // Fallback to /listings if no redirect URL
+        
         res.redirect(redirectUrl);
     });
     

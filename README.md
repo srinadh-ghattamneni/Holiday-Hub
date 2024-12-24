@@ -1,1 +1,1 @@
-# wanderlust
+# wanderlust : a travel booking website
