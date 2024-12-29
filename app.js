@@ -1,3 +1,10 @@
+if(process.env.NODE_ENV != "production")
+{
+  require('dotenv').config();
+}
+
+
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -14,7 +21,6 @@ const { isLoggedIn } = require("./middleware.js");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const UserRouter = require("./routes/user.js");
-
 
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -54,8 +60,9 @@ const sessionOptions={
 
 
 app.get("/", (req, res) => {
-  res.send("Hi, I am root");
+  res.redirect("/listings"); // Redirects to the "All Listings" page
 });
+
 
 app.use(session(sessionOptions));
 app.use(flash());

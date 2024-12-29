@@ -10,11 +10,15 @@ body {
 
   display:flex;
   flex-direction: column;
+ 
   min-height: 100vh;
 }
 
 .container{
   flex:1;
+  width: 90vw !important; /* Adjust percentage as needed */
+  max-width: 100vw !important;
+  margin: 0 auto !important; /* Center the container horizontally */
 }
 
  .navbar{
@@ -29,6 +33,11 @@ body {
  .nav-link{
     color:#222222 !important;
  }
+
+ 
+.navbar .navbar-brand i {
+  font-size: 2.25rem !important; /* Set desired size */
+}
 
  /*footer*/
  .f-info-links a{
@@ -50,12 +59,20 @@ align-items: center;
 justify-content: center;
  }
 
-
+.f-info-socials{
+  height: 2rem;
+}
 
  .f-info-socials i{
-   font-size: 1.3rem;
-   margin-right: 1.15rem;
+   font-size: 2.2rem !important;
+   margin-right: 1.5rem;
  }
+
+ .f-info-socials i:hover{
+  font-size: 2.5rem !important;
+  transition: 100ms linear;
+  
+}
 
 
  .f-info{
@@ -76,7 +93,7 @@ justify-content: center;
 }
 
 .card-img-top{
-  border-radius: 1rem !important;
+  border-radius: 1rem 1rem 0rem 0rem !important;
   width:100% !important;
   object-fit: cover !important;
 }
@@ -94,6 +111,16 @@ justify-content: center;
   text-decoration: none;
 }
 
+.listing-card-div{
+  border-radius: 1rem !important;
+}
+
+
+.listing-card-text{
+ 
+  padding:0.5rem 0.5rem 0.5rem 0.5rem ;
+  
+}
 /* card effect */
 .card-img-overlay{
   opacity:0;
@@ -127,7 +154,12 @@ justify-content: center;
 
 .btns{
   display: flex;
+  
 }
+.edit-btn {
+  min-width: 3rem;
+}
+
 
 
 .show-card{
@@ -140,15 +172,14 @@ justify-content: center;
 
 /* final styling of icons and text toggle  */
 
-.filter_icon_names {
-  font-size: 0.9rem;
-}
+
 
 #filters {
   display: flex;
   flex-wrap: wrap;
   color: #fe424d;
   align-items: center;
+  justify-content: center;
 }
 
 .filter {
@@ -157,7 +188,7 @@ justify-content: center;
   font-size: 1.5rem;
   margin-bottom: 1rem;
   text-align: center;
-  margin-right: 2rem;
+  margin-right: 1.8rem;
   opacity: 0.88;
   transition: color 0.3s ease, text-shadow 0.3s ease, font-size 0.3s ease;
 }
@@ -182,16 +213,77 @@ justify-content: center;
 
 .tax-toggle{
   border: 1px solid black;
-  border-radius: 1rem;
-  height: 3.25rem;
-  padding: 1rem;
-  margin-left: 5rem;
+  border-radius: 0.5rem;
+  height: 3.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  margin-left: 1rem;
   display: flex;
   align-items: center;
+  justify-content: center;
  
   
 }
 
 
-
 /* search */
+/* Center the search form in the navbar */
+.navbar .form-inline {
+  margin: 0 auto !important; /* Center horizontally */
+  display: flex ;
+  align-items: center ; /* Center vertically */
+  justify-content: center ;
+  
+}
+
+.input-search {
+  width: 30vw !important; /* Ensures the width is applied */
+  border-radius: 0.5rem !important; /* Ensures rounded corners */
+  height: 3rem !important;
+}
+
+/* Ensure the search button contents are aligned */
+.search-btn {
+  display: flex !important;
+  align-items: center !important; /* Vertically align icon and text */
+  justify-content: center !important; /* Horizontally center contents */
+  height: 3rem !important;
+  padding: 0.5rem 1rem; /* Adjust padding to ensure the button size fits */
+  font-size: 1rem; 
+  border-radius: 0.5rem !important;
+  
+}
+
+
+.navbar-nav a{
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+
+/* Adjustments for smaller screens */
+@media (max-width: 767px) {
+  .input-search {
+    width: 70vw !important; /* On smaller screens, adjust to 60% of the viewport width */
+    height: 2.5rem !important; /* Slightly smaller height */
+  }
+}
+
+/* For very small screens (mobile) */
+@media (max-width: 480px) {
+  .input-search {
+    width: 60vw !important; /* On mobile, make the input take up 80% of the screen width */
+    height: 2.5rem !important; /* Keep a consistent height */
+  }
+}
+
+/* listing details and reviews */
+.reviews-div .card {
+  padding: 15px;
+}
+
+/* 
+login ad signup pages */
+
+
