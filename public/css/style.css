@@ -265,7 +265,7 @@ justify-content: center;
 /* Adjustments for smaller screens */
 @media (max-width: 767px) {
   .input-search {
-    width: 70vw !important; /* On smaller screens, adjust to 60% of the viewport width */
+    width: 70vw !important; /* On smaller screens, adjust to 70% of the viewport width */
     height: 2.5rem !important; /* Slightly smaller height */
   }
 }
@@ -273,7 +273,7 @@ justify-content: center;
 /* For very small screens (mobile) */
 @media (max-width: 480px) {
   .input-search {
-    width: 60vw !important; /* On mobile, make the input take up 80% of the screen width */
+    width: 60vw !important; /* On mobile, make the input take up 60% of the screen width */
     height: 2.5rem !important; /* Keep a consistent height */
   }
 }
@@ -285,5 +285,7 @@ justify-content: center;
 
 /* 
 login ad signup pages */
-
-
+/* Default button style for extra small screens (width: 100%) */
+.login-btn,.signup-btn {
+  width: 8rem;
+}

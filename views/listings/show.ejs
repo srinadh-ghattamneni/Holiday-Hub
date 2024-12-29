@@ -18,9 +18,10 @@
           </b><br></h4>
         </p>
 
-
+        <% if(listing.owner) {  %>
         <p class="card-text mt-3 fs-5">Owned by &nbsp<%= listing.owner.username %>
         </p>
+        <% } %>
 
         <p class="card-text mt-3 fs-5">
           <%= listing.description %><br>
