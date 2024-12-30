@@ -7,23 +7,32 @@
             <form action="/signup" method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="username" class="form-label">User Name</label>
-                    <input name="username" id="username" type="text" class="form-control" required />
+                    <input name="username" id="username" type="text" 
+                    minlength="4" 
+                    placeholder="Enter your username"
+                    class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">Please enter a valid user name!</div>
+                    <div class="invalid-feedback">Username must be at least 4 characters long !</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input name="email" id="email" type="email" class="form-control" required />
+                    <input name="email" id="email" type="email"
+                    placeholder="Enter your email"
+                     pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
+                     class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
                     <div class="invalid-feedback">Please enter a valid email !</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input name="password" id="password" type="password" class="form-control" required />
+                    <input name="password" id="password" type="password"
+                     pattern="(?=.*\d)[a-zA-Z\d]{5,}" 
+                     placeholder="Create a password (min. 5 characters)"
+                     class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">Please enter a valid password !</div>
+                    <div class="invalid-feedback">The password must be at least 5 characters long and include at least one digit !</div>
                 </div>
 
                 <div class="text-center">
