@@ -51,7 +51,6 @@ module.exports.isOwner= async(req,res, next)=>{
 
 
 module.exports.validateListing = (req, res, next) => {
-  //console.log(req.body);
     const { error } = listingSchema.validate(req.body);
     if (error) {
       const errMsg = error.details.map((el) => el.message).join(", ");
@@ -91,8 +90,6 @@ module.exports.clearRedirectUrl = (req, res, next) => {
   req.session.redirectUrl = "/listings"; // Default to "All Listings"
   next();
 };
-
-
 
 
 module.exports.validateSignup = async (req, res, next) => {

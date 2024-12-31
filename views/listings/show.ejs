@@ -1,13 +1,21 @@
 <% layout("/layouts/boilerplate") %>
+<script >
+  // Pass an array of coordinates to JSON.stringify
+  const coordinates = <%- JSON.stringify([{ lat: listing.coordinates.lat , lng: listing.coordinates.lng }]) %>;
+
+</script>
+
 
   <div class="row">
-    <div class="col-8 offset-2 mt-3 mb-3">
+    <div class="col-12 col-md-8 offset-md-2   col-lg-8 offset-lg-2   mt-3 mb-3">
+
       <h3>
         <b>Listing Details:</b><br>
 
       </h3>
     </div>
-    <div class="card col-8 offset-2  show-card mb-3 listing-card">
+    <div class="card col-12 col-md-8 offset-md-2 show-card mb-3 listing-card show-listing-card">
+
       <img class="card-img-top show-img" style="width: 100%; height: 40vh; object-fit: contain;"
         src="<%= listing.image.url %>" alt="listing_image">
 
@@ -19,16 +27,33 @@
         </p>
 
         <% if(listing.owner) {  %>
-        <p class="card-text mt-3 fs-5">Owned by &nbsp<%= listing.owner.username %>
+        <p class="card-text mt-3 fs-5 show-card-text">Owned by &nbsp<%= listing.owner.username %>
         </p>
         <% } %>
 
-        <p class="card-text mt-3 fs-5">
+        <p class="card-text mt-3 fs-5 show-card-text">
           <%= listing.description %><br>
         </p>
-        <p class="card-text mt-3 fs-5"> Price:&nbsp&#8377;&nbsp <%= listing.price.toLocaleString("en-IN") %><br></p>
-        <p class="card-text mt-3 fs-5"> Location :<%= listing.location %><br></p>
-        <p class="card-text mt-3 fs-5"> Country: <%= listing.country %><br></p>
+        <p class="card-text mt-3 fs-5 show-card-text"> Price:&nbsp&#8377;&nbsp <%= listing.price.toLocaleString("en-IN") %> / night<br></p>
+        <p class="card-text mt-3 fs-5 show-card-text"> Location :<%= listing.location %><br></p>
+        <p class="card-text mt-3 fs-5 show-card-text"> Country: <%= listing.country %><br></p>
+
+        <%   if (listing.owner && currUser && currUser._id.equals(listing.owner._id))  {   %>
+
+
+     
+          <div class="btns  mb-3">
+            <a href="/listings/<%= listing._id %>/edit"
+              class="btn btn-dark edit-btn  listing-edit-btn btn-sm btn-md fs-6">Edit</a>
+      
+      
+            <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+              <button class="btn btn-dark listing-delete-btn fs-6">Delete</button>
+            </form>
+          </div>
+      
+          <%  }    %>
+
 
       </div>
     </div>
@@ -36,29 +61,18 @@
 
     <br>
     <br>
+    <div class="col-12 col-md-8 offset-md-2 mt-3 mb-3">
 
+      <h3>
+        <b>where You'll be</b><br>
 
-
-    <%   if (listing.owner && currUser && currUser._id.equals(listing.owner._id))  {   %>
-
-
-     
-    <div class="btns  mb-3">
-      <a href="/listings/<%= listing._id %>/edit"
-        class="btn btn-dark edit-btn col-1 offset-2 btn-sm btn-md fs-6">Edit</a>
-
-
-      <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
-        <button class="btn btn-dark offset-4 fs-6">Delete</button>
-      </form>
+      </h3>
+      <div id="map"></div>
     </div>
-
-    <%  }    %>
-
+    <br>
 
 
-
-
+    
 
     <!-- reviews -->
 
@@ -106,12 +120,12 @@
           </b> </div>
 
 
-          <div class="reviews-div mb-3 row d-flex flex-wrap">
-            <div class="row mt-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-1 d-flex">
+          <div class="reviews-div mb-3 row d-flex flex-wrap ">
+            <div class=" inner-reviews-div row mt-2 row-cols-lg-2 row-cols-md-2 row-cols-sm-1 row-cols-xs-1 d-flex">
               <% for (review of listing.reviews) { %>
                 <% if(review.author) {  %>
-                <div class="col mb-3 d-flex">
-                  <div class="card flex-grow-1">
+                <div class="col mb-3 w-xs-100 d-flex">
+                  <div class="card flex-grow-1 w-100">
                     <div class="card-body">
                       
                       <h5 class="card-title fs-4">
@@ -137,5 +151,6 @@
           
           
 
+      
 
   </div>

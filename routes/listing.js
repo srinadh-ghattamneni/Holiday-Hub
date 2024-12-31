@@ -15,7 +15,7 @@ router.route("/")
 //Index Route
 .get(clearRedirectUrl,wrapAsync(listingController.index))
   // Create Route modifed to accept the correct image format 
-.post(isLoggedIn, 
+.post(isLoggedIn,
   upload.single('listing[image][url]'),
   validateListing,
    wrapAsync(listingController.createListing));

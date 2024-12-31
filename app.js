@@ -2,9 +2,6 @@ if(process.env.NODE_ENV != "production")
 {
   require('dotenv').config();
 }
-
-
-
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -21,8 +18,6 @@ const { isLoggedIn } = require("./middleware.js");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const UserRouter = require("./routes/user.js");
-
-
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
@@ -83,17 +78,6 @@ app.use((req,res,next)=>{
   res.locals.currUser = req.user;
   next(); 
 });
-
-
-// app.get("/demouser",async(req,res)=>{
-//   let fakeUser= new User({
-//     email:"student@gmail.com",
-//     username:"student",
-//   });
-//     let registeredUser=await User.register(fakeUser,"helloworld");
-//     res.send(registeredUser);
-// });
-
 
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);

@@ -156,18 +156,24 @@ justify-content: center;
   display: flex;
   
 }
-.edit-btn {
+.listing-edit-btn {
   min-width: 3rem;
+  margin-right: 1rem;
 }
 
-
+.show-card-text{
+margin-right: 1rem;
+}
 
 .show-card{
   padding-left: 0 !important;
   padding-right: 0 !important;
   border: none !important;
 }
-
+.show-listing-card{
+  border: 2px solid black !important;
+  border-radius: 1rem !important;
+}
 
 
 /* final styling of icons and text toggle  */
@@ -283,9 +289,28 @@ justify-content: center;
   padding: 15px;
 }
 
+.reviews-div{
+  justify-content: center !important;
+  
+}
+.inner-reviews-div{
+  justify-content: center !important;
+  margin: 0;
+}
+
+
+
 /* 
 login ad signup pages */
 /* Default button style for extra small screens (width: 100%) */
 .login-btn,.signup-btn {
   width: 8rem;
 }
+
+
+/* map */
+#map {
+   height: 60vh; 
+  width:auto;
+   border: 2px solid black;
+  }

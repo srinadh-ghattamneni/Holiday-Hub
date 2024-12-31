@@ -10,7 +10,7 @@
 
           <div class="mb-4 mt-2">
             <label for="title" class="form-label fs-5">Title</label>
-            <input name="listing[title]" placeholder="Enter a catchy title" type="text" class="form-control" required />
+            <input name="listing[title]" placeholder="Enter a catchy title" maxlength="100" type="text" class="form-control" required />
 
             <div class="valid-feedback">
               Looks good!
@@ -46,7 +46,7 @@
 
           <div class="mb-4">
             <label for="price" class="form-label fs-5">Price</label>
-            <input name="listing[price]" placeholder="Enter price" type="number"  min="0" class="form-control" required />
+            <input name="listing[price]" placeholder="Enter price" type="number"  min="1" max="100000000"  class="form-control" required />
 
             <div class="valid-feedback">
               Looks good!
@@ -60,7 +60,7 @@
 
           <div class="mb-4">
             <label for="country" class="form-label fs-5">Country</label>
-            <input name="listing[country]" placeholder="Enter country" type="text"   class="form-control" required />
+            <input name="listing[country]" placeholder="Enter country" type="text" maxlength="100"  class="form-control" required />
 
             <div class="valid-feedback">
               Looks good!
@@ -74,7 +74,9 @@
 
           <div class="mb-4">
             <label for="location" class="form-label fs-5">Location</label>
-            <input name="listing[location]" placeholder="Enter location" type="text" class="form-control" required />
+            <input name="listing[location]" placeholder="Enter address of the listing"
+             pattern="^[A-Za-z0-9\s,.'-]+$" 
+             maxlength="150" type="text" class="form-control" required />
 
             <div class="valid-feedback">
               Looks good!

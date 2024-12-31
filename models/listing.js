@@ -19,6 +19,13 @@ const listingSchema = new Schema({
   price: Number,
   location: String,
   country: String,
+  coordinates: {
+    type: {
+      lat: Number,
+      lng: Number,
+    }
+    ,default: { lat: 28.7041, lng: 77.1025 }, // Default values
+  },
   reviews:[
     {
       type:Schema.Types.ObjectId,
@@ -37,7 +44,7 @@ listingSchema.post("findOneAndDelete",async(listing)=>{
   await Review.deleteMany({_id:{$in: listing.reviews}});
  }
  
-  
+
 })
 
 const Listing = mongoose.model("Listing", listingSchema);

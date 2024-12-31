@@ -1,5 +1,5 @@
 const Listing = require("../models/listing");
-
+const geocoder = require("../utils/geocoder");
 
 
 module.exports.index=async(req,res) =>{
@@ -32,6 +32,7 @@ module.exports.showListing =async (req, res) => {
   }
 
 
+
   module.exports.createListing = async (req, res, next) => {
     const { listing } = req.body;
 
@@ -46,15 +47,27 @@ module.exports.showListing =async (req, res) => {
         filename = "listingimage";
     }
 
+
+      // Geocode the location
+  const geoData = await geocoder.geocode(listing.location);
+  const coordinates = geoData[0] ? 
+  { lat: geoData[0].latitude, lng: geoData[0].longitude } : { lat: 28.7041, lng: 77.1025 };
+
     // Create a new listing with the data
     const newListing = new Listing(listing);
     newListing.owner = req.user._id; // Associate with the logged-in user
     newListing.image = { filename, url }; // Assign image details
+    newListing.coordinates = coordinates;
+    console.log(newListing);
 
     await newListing.save();
+
+
     req.flash("success", "New listing created successfully!");
     res.redirect("/listings");
 };
+
+
 
 
 module.exports.renderEditForm=async (req, res) => {
@@ -77,8 +90,13 @@ module.exports.updateListing=async (req, res) => {
     const { listing } = req.body;
 
 
-    //listing.image.filename = "listingimage";  // Set the filename directly
-    let currentListing = await Listing.findByIdAndUpdate(id, { ...listing });
+    const geoData = await geocoder.geocode(listing.location);
+  const coordinates = geoData[0] ? 
+  { lat: geoData[0].latitude, lng: geoData[0].longitude } : 
+  { lat: currentListing.coordinates.lat, lng: currentListing.coordinates.lng };
+
+    
+  currentListing = await Listing.findByIdAndUpdate(id, { ...listing,coordinates,});
     
 
     // Check if an image file was uploaded

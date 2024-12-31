@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const initData = require("./data.js");
-const initData2=require("./data2.js");
+const initData = require("./data2.js");
 const Listing = require("../models/listing.js");
 
 require('dotenv').config({ path: '../.env' }); // Adjust the path if index.js is in a subfolder
