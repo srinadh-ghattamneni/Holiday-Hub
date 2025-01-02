@@ -16,7 +16,7 @@ module.exports.signup =async (req, res) => {
      const otp = generateOtp();
      registeredUser.otp = otp;
      registeredUser.otpExpires = Date.now() + 5 * 60 * 1000;
-     console.log("------\n",registeredUser);
+   
      await registeredUser.save();
 
 
@@ -50,52 +50,91 @@ module.exports.verifyOtp = async (req, res, next) => {
 
   if (!email || !otp) {
     req.flash("error", "Email and OTP are required.");
-    return res.redirect("/verify-otp");
-}
-  // Find user and validate OTP
+    return res.render("users/verifyOtp.ejs", { email }); // Pass email back to the view
+  }
+
   const user = await User.findOne({ email });
 
-  if (!user ) {
-    req.flash("error", "Invalid email");
-    return res.redirect("/verify-otp");
+  if (!user) {
+    req.flash("error", "Invalid email.");
+    return res.render("users/verifyOtp.ejs", { email }); // Pass email back to the view
   }
 
-
- // Check if OTP has expired
- if (user.otpExpires < Date.now()) {
-  user.otp = undefined;  // Clear expired OTP
-  user.otpExpires = undefined;
-  await user.save();
-}
-
- // is someone directly tries to access the verify-otp router
-  if ( !user.otp) {
-    req.flash("error", " OTP not found.");
-    return res.redirect("/verify-otp");
+  if (!user.otp || user.otp.trim() !== otp.trim() || user.otpExpires < Date.now()) {
+    req.flash("error", "Invalid or expired OTP.");
+    return res.render("users/verifyOtp.ejs", { email }); // Pass email back to the view
   }
 
-  if (  user.otp.trim() !== otp.trim() || user.otpExpires < Date.now() ) {
-    req.flash("error", "Invalid or expired OTP!");
-    return res.redirect("/verify-otp");
-  }
-
-  // Clear OTP fields and mark email as verified
+  // Clear OTP and verify email
   user.otp = undefined;
   user.otpExpires = undefined;
-  user.emailVerified = true;  // Set emailVerified to true after successful OTP verification
+  user.emailVerified = true;
   await user.save();
 
-  req.flash("success", "Signup Successful !");
-
-  // Log the user in after successful verification
+  req.flash("success", "Signup Successful!");
   req.login(user, (err) => {
-      if (err) {
-          return next(err); // Pass the error to your error handler
-      }
-      req.flash("success", "Welcome to WanderLust!");
-      return res.redirect("/listings");
+    if (err) {
+      return next(err);
+    }
+    req.flash("success", "Welcome to Wanderlust!");
+    return res.redirect("/listings");
   });
 };
+
+
+
+module.exports.resendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    req.flash("error", "Email is required.");
+    return res.redirect("/signup");
+  }
+
+  try {
+    // Find the user
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      req.flash("error", "No user found with this email.");
+      return res.redirect("/signup");
+    }
+
+    // Check if the user has already verified their email
+    if (user.emailVerified) {
+      req.flash("error", "Email is already verified.");
+      return res.redirect("/login");
+    }
+
+    // Generate a new OTP
+    const otp = generateOtp();
+    user.otp = otp;
+    user.otpExpires = Date.now() + 5 * 60 * 1000; // Set expiry for 5 minutes
+    user.lastOtpSent = new Date(); // Record the time of sending the OTP
+    await user.save();
+
+    // Send the OTP via email
+    const verificationCodeHtml = `
+      <p>Your new OTP is: <strong>${otp}</strong></p>
+      <p>Please enter this code to verify your email address. This code will expire in 5 minutes.</p>
+    `;
+    await sendEmail(
+      email,
+      "Resend OTP - Wanderlust",
+      "Here is your new OTP.",
+      verificationCodeHtml
+    );
+
+    req.flash("success", "A new OTP has been sent to your email.");
+    res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong. Please try again.");
+    res.redirect("/signup");
+  }
+};
+
+
 
 
 module.exports.renderLoginForm =(req, res) => {

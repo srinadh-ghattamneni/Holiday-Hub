@@ -16,6 +16,7 @@ router.route("/signup")
 router.post("/resend-otp", wrapAsync(userController.resendOtp));
 
 
+
 router.route("/verify-otp")
 .get( userController.renderOtpForm)
 .post( wrapAsync(userController.verifyOtp));

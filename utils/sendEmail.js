@@ -27,7 +27,7 @@ const sendEmail = async (to, subject, text,verificationCode) => {
  
 
   } catch (error) {
-    console.error("Error sending email:", error);
+    //console.error("Error sending email:", error);
   }
 
 };
