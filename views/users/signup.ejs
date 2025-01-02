@@ -7,8 +7,9 @@
             <form action="/signup" method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label for="username" class="form-label">User Name</label>
-                    <input name="username" id="username" type="text" 
+                    <input name="username" id="username" type="text"  
                     minlength="4" 
+                    maxlength="60"
                     placeholder="Enter your username"
                     class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
@@ -17,8 +18,9 @@
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input name="email" id="email" type="email"
+                    <input name="email" id="email" type="email" 
                     placeholder="Enter your email"
+                    maxlength="60"
                      pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
                      class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
@@ -28,7 +30,9 @@
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input name="password" id="password" type="password"
-                     pattern="(?=.*\d)[a-zA-Z\d]{5,}" 
+                    minlength="5"
+                    maxlength="60"
+                    pattern="(?=.*\d).{5,60}"
                      placeholder="Create a password (min. 5 characters)"
                      class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>

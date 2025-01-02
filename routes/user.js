@@ -13,6 +13,14 @@ router.route("/signup")
 .post(validateSignup, wrapAsync(userController.signup));
 
 
+router.post("/resend-otp", wrapAsync(userController.resendOtp));
+
+
+router.route("/verify-otp")
+.get( userController.renderOtpForm)
+.post( wrapAsync(userController.verifyOtp));
+
+
 router.route("/login")
 // Login route (GET)
 .get(userController.renderLoginForm)

@@ -110,8 +110,13 @@ module.exports.validateSignup = async (req, res, next) => {
   }
 
     // Validate username length (at least 4 characters)
-    if (username.length < 4) {
+    if (username.length < 4   ) {
       req.flash("error", "Username must be at least 4 characters long.");
+      return res.redirect("/signup");
+    }
+
+    if (username.length > 60   ) {
+      req.flash("error", "Username must be at most 60 characters long.");
       return res.redirect("/signup");
     }
 
@@ -123,11 +128,17 @@ module.exports.validateSignup = async (req, res, next) => {
   }
 
   // Validate password (at least 5 characters with at least 1 number)
-  const passwordRegex = /^(?=.*\d)[a-zA-Z\d]{5,}$/; // At least 5 characters with 1 number
-  if (!passwordRegex.test(password)) {
-    req.flash("error", "Password must be at least 5 characters long and contain at least one number.");
-    return res.redirect("/signup");
-  }
+// Validate password (at least 5 characters with at least 1 number)
+if (password.length < 5 || !password.split('').some(char => char >= '0' && char <= '9')) {
+  req.flash("error", "Password must be at least 5 characters long and contain at least one number.");
+  return res.redirect("/signup");
+}
+
+if (password.length > 60   ) {
+  req.flash("error", "password must be at most 60 characters long.");
+  return res.redirect("/signup");
+}
+
 
   // Proceed to the next middleware/controller if all checks pass
   next();

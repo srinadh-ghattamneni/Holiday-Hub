@@ -29,7 +29,7 @@ module.exports.showListing =async (req, res) => {
     }
    // console.log(listing);
     res.render("listings/show.ejs", { listing });
-  }
+  };
 
 
 

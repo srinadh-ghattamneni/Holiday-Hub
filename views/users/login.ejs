@@ -1,4 +1,4 @@
-<% layout("/layouts/boilerplate") %>
+
 
  <% layout("/layouts/boilerplate") %>
 
@@ -9,14 +9,18 @@
             <form action="/login" method="POST" class="needs-validation " novalidate>
                 <div class="mb-3">
                     <label for="username" class="form-label">User Name</label>
-                    <input name="username" id="username"  placeholder="Enter your username"  minlength="4"  type="text" class="form-control" required />
+                    <input name="username" id="username"  placeholder="Enter your username"  
+                    minlength="4" maxlength="60" type="text" class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
                     <div class="invalid-feedback">Please enter a valid user name!</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input name="password" id="password" type="password" placeholder="Enter your password"  pattern="(?=.*\d)[a-zA-Z\d]{5,}"  class="form-control" required />
+                    <input name="password" id="password" type="password" placeholder="Enter your password" 
+                    minlength="5"
+                    maxlength="60"
+                    pattern="(?=.*\d).{5,60}" class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
                     <div class="invalid-feedback">Please enter a valid password !</div>
                 </div>
