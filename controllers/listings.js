@@ -58,7 +58,7 @@ module.exports.showListing =async (req, res) => {
     newListing.owner = req.user._id; // Associate with the logged-in user
     newListing.image = { filename, url }; // Assign image details
     newListing.coordinates = coordinates;
-    console.log(newListing);
+    
 
     await newListing.save();
 

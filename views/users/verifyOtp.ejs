@@ -1,29 +1,55 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="container">
-    <h2>Verify OTP</h2>
-    <form action="/verify-otp" method="POST">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          name="email"
-          value="<%= email %>"
-          readonly
-        />
-      </div>
-      <div class="mb-3">
-        <label for="otp" class="form-label">OTP</label>
-        <input type="text" class="form-control" id="otp" name="otp" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Verify OTP</button>
-    </form>
-  
-    <form action="/resend-otp" method="POST" class="mt-3">
-      <input type="hidden" name="email" value="<%= email %>" />
-      <button type="submit" class="btn btn-secondary">Resend OTP</button>
-    </form>
-  </div>
-  
+    <div class="container">
+        <h2>Verify OTP</h2>
+        <form action="/verify-otp" method="POST">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="<%= email %>" readonly />
+            </div>
+            <div class="mb-3">
+                <label for="otp" class="form-label">OTP</label>
+                <input type="text" class="form-control" id="otp" name="otp" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Verify OTP</button>
+        </form>
+
+        <form id="resendOtpForm" action="/resend-otp" method="POST" class="mt-3">
+            <input type="hidden" name="email" value="<%= email %>" />
+            <button type="submit" id="resendOtpButton" class="btn btn-secondary" disabled>
+                Resend OTP
+            </button>
+        </form>
+    </div>
+
+    <script>
+        let cooldown = <%= cooldown %>;
+        // Select the resend OTP button
+        const resendOtpButton = document.querySelector("#resendOtpButton");
+        // Function to start the countdown
+        const startCountdown = () => {
+            const interval = setInterval(() => {
+                if (cooldown > 0) {
+                    resendOtpButton.textContent = `Wait ${cooldown--} seconds`;
+                    resendOtpButton.disabled = true;
+                } else {
+                    clearInterval(interval);
+                    resendOtpButton.textContent = "Resend OTP";
+                    resendOtpButton.disabled = false;
+                }
+            }, 1000);
+        };
+        // Initialize the countdown if there's a cooldown
+        if (cooldown >=0) {
+            startCountdown();
+        }
+        // Handle form submission for resend OTP
+        const resendOtpForm = document.querySelector("#resendOtpForm");
+        resendOtpForm.addEventListener("submit", (e) => {
+            e.preventDefault(); // Prevent form submission to handle cooldown
+    
+            if (!resendOtpButton.disabled) {
+                resendOtpForm.submit();
+            }
+        });
+    </script>

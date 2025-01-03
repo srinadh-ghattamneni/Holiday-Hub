@@ -19,7 +19,7 @@ const userSchema =new Schema({
     otpExpires: {
         type: Date
     },
-    lastOtpSent: { type: Date } 
+    lastOtpSent: { type: Date } ,
 });
 
 userSchema.plugin(passportLocalMongoose);
