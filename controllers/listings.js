@@ -93,10 +93,10 @@ module.exports.updateListing=async (req, res) => {
     const geoData = await geocoder.geocode(listing.location);
   const coordinates = geoData[0] ? 
   { lat: geoData[0].latitude, lng: geoData[0].longitude } : 
-  { lat: currentListing.coordinates.lat, lng: currentListing.coordinates.lng };
+  { lat: 28.7041, lng: 77.1025 };
 
     
-  currentListing = await Listing.findByIdAndUpdate(id, { ...listing,coordinates,});
+  let currentListing = await Listing.findByIdAndUpdate(id, { ...listing,coordinates,});
     
 
     // Check if an image file was uploaded

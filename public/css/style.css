@@ -314,3 +314,8 @@ login ad signup pages */
   width:auto;
    border: 2px solid black;
   }
+
+
+  .navbar>.container-fluid { 
+    background-color: white!important ;
+  }

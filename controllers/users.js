@@ -1,7 +1,9 @@
+const { use } = require("passport");
 const User = require("../models/user.js");
 const generateOtp = require("../utils/otp");
 const sendEmail = require("../utils/sendEmail");
 const COOLDOWN_PERIOD = 1 * 60 * 1000; // 60 seconds cooldown
+const crypto = require("crypto");
 
 module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
@@ -154,6 +156,96 @@ module.exports.resendOtp = async (req, res) => {
 module.exports.renderLoginForm = (req, res) => {
   res.render("users/login.ejs");
 }
+
+
+module.exports.renderForgotPasswordForm = (req, res) => {
+    res.render("users/forgotPassword.ejs");
+};
+
+module.exports.forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        req.flash("error", "No account with that email exists.");
+        return res.redirect("/forgot-password");
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    // Send email with reset link
+    const resetLink = `${req.protocol}://${req.get("host")}/reset-password/${resetToken}`;
+   
+    const resetEmailHtml = `
+        <p>You requested a password reset.</p>
+        <p>Click <a href="${resetLink}">here</a> to reset your password.</p>
+        <p>If you did not request this, please ignore this email.</p>
+    `;
+    await sendEmail(
+        user.email,
+        "Password Reset Request",
+        "You requested a password reset.",
+        resetEmailHtml
+    );
+
+    req.flash("success", "An email has been sent with password reset instructions.");
+    res.redirect("/login");
+};
+
+module.exports.renderResetPasswordForm = async (req, res) => {
+    const { token } = req.params;
+    const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        req.flash("error", "Password reset token is invalid or has expired.");
+        return res.redirect("/forgot-password");
+    }
+
+    res.render("users/resetPassword.ejs", { token });
+};
+
+module.exports.resetPassword = async (req, res) => {
+  try {
+      const user = await User.findOne({
+          resetPasswordToken: req.params.token,
+          resetPasswordExpires: { $gt: Date.now() }, // Check if token is valid
+      });
+
+      if (!user) {
+          req.flash('error', 'Password reset token is invalid or has expired.');
+          return res.redirect('/forgot-password');
+      }
+
+      if (req.body.password !== req.body.confirmPassword) {
+          req.flash('error', 'Passwords do not match.');
+          return res.redirect('back');
+      }
+
+      // Hash new password
+      user.setPassword(req.body.password, async (err) => {
+          if (err) {
+              req.flash('error', 'Error setting new password.');
+              return res.redirect('back');
+          }
+          user.resetPasswordToken = undefined;
+          user.resetPasswordExpires = undefined;
+          await user.save();
+
+          req.flash('success', 'Your password has been updated.');
+          res.redirect('/login');
+      });
+  } catch (err) {
+      console.error(err);
+      res.redirect('/forgot-password');
+  }
+};
+
 
 // actually afterLogin, coz login is done by passport
 module.exports.login = async (req, res) => {

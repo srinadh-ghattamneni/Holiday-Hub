@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const passportLocalMongoose =require("passport-local-mongoose");
 
-const userSchema =new Schema({
+const userSchema = new Schema({
     email: {
         type: String,
         required: true,
@@ -13,13 +13,11 @@ const userSchema =new Schema({
         type: Boolean,
         default: false
     },
-    otp: {
-        type: String
-    },
-    otpExpires: {
-        type: Date
-    },
-    lastOtpSent: { type: Date } ,
+    otp: String,
+    otpExpires: Date,
+    lastOtpSent: Date,
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 });
 
 userSchema.plugin(passportLocalMongoose);

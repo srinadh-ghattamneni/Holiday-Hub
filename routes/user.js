@@ -15,12 +15,9 @@ router.route("/signup")
 
 router.post("/resend-otp", wrapAsync(userController.resendOtp));
 
-
-
 router.route("/verify-otp")
 .get( userController.renderOtpForm)
 .post( wrapAsync(userController.verifyOtp));
-
 
 router.route("/login")
 // Login route (GET)
@@ -30,7 +27,18 @@ router.route("/login")
         failureRedirect: "/login",
         failureFlash: true
     }), userController.login);
-    
+
+
+// Forgot Password
+router.route("/forgot-password")
+    .get(userController.renderForgotPasswordForm)
+    .post(wrapAsync(userController.forgotPassword));
+
+// Reset Password
+router.route("/reset-password/:token")
+    .get(wrapAsync(userController.renderResetPasswordForm))
+    .post(wrapAsync(userController.resetPassword));
+
 // Logout route
 router.get("/logout",userController.logout);
       
