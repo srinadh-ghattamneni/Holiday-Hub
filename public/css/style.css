@@ -315,7 +315,7 @@ login ad signup pages */
    border: 2px solid black;
   }
 
-
+/* navbar dropdown background color */
   .navbar>.container-fluid { 
     background-color: white!important ;
   }
