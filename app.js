@@ -46,17 +46,11 @@ const sessionOptions={
   resave:false,
   saveUninitialized: true,
   cookie:{
-    expires: Date.now() +7*24*60*1000,
-    maxAge:7*24*60*1000,
+    expires: Date.now() +30*60*1000,
+    maxAge:5*60*1000,
     httpOnly:true,
   }
 };
-
-
-app.get("/", (req, res) => {
-  res.redirect("/listings"); // Redirects to the "All Listings" page
-});
-
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -76,6 +70,11 @@ app.use((req,res,next)=>{
   next(); 
 });
 
+
+app.get("/", (req, res) => {
+  res.redirect("/listings"); // Redirects to the "All Listings" page
+});
+
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",UserRouter);
@@ -87,6 +86,7 @@ app.all("*", (req, res, next) => {
 
 // custom error handler
 app.use((err, req, res, next) => {
+
   let { statusCode = 500, message = "something went wrong !" } = err;
   res.status(statusCode).render("error.ejs", { err });
 });

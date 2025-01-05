@@ -5,11 +5,7 @@ const Listing = require("../models/listing.js");
 const { isLoggedIn ,isOwner,validateListing,clearRedirectUrl} = require("../middleware.js");
 const listingController =require("../controllers/listings.js");
 
-const multer  = require('multer');
-const {storage}=require("../cloudConfig.js");
-const upload = multer({ storage});
-
-
+const { upload } = require("../cloudConfig.js");
 
 router.route("/")
 //Index Route

@@ -85,6 +85,25 @@
   const listingEditBtn = document.getElementById('listingEditBtn');
   const listingEditForm = document.getElementById('listingEditForm');
 
+   
+  listingEditForm.addEventListener('change', function(event) {
+  const fileInput = event.target;
+  if (fileInput.type === 'file') {
+    const file = fileInput.files[0];
+    if (file && file.size > 1048576) { // 1 MB
+      alert('File size must be less than 1 MB!');
+      fileInput.value = ''; // Reset the file input
+      return;
+    }
+    // Check file type
+    if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
+      alert('Only JPEG (JPG) or PNG image files are allowed!');
+      fileInput.value = ''; // Reset the file input
+      return;
+    }
+  }
+});
+
   listingEditForm.addEventListener('submit', function (event) {
       // Check if the form is valid
       if (!listingEditForm.checkValidity()) {

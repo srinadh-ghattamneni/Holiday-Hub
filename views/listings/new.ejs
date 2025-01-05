@@ -31,7 +31,7 @@
 
         <div class="mb-4">
           <label for="image" class="form-label fs-5">Upload Listing Image</label>
-          <input name="listing[image][url]" type="file" class="form-control" />
+          <input name="listing[image][url]" type="file"  class="form-control" />
         </div>
 
         <div class="mb-4">
@@ -76,24 +76,29 @@
 </div>
 
 
-<!-- <script>
-  // JavaScript to disable the button for 5 seconds after it's clicked and submit the form
-  document.getElementById('listing-add-btn').addEventListener('click', function(event) {
-    event.preventDefault();  // Prevent default form submission
-    var button = event.target;
-    var form = button.closest('form');  // Get the closest form element
-    button.disabled = true;  // Disable the button
-    form.submit();
-    // Re-enable the button after 5 seconds
-    setTimeout(function() {
-      button.disabled = false;  // Enable the button after 5 seconds
-    }, 5000);
-  });
-</script> -->
-
 <script>
   const listingAddBtn = document.getElementById('listingAddBtn');
   const listingAddForm = document.getElementById('listingAddForm');
+
+ 
+listingAddForm.addEventListener('change', function(event) {
+  const fileInput = event.target;
+  if (fileInput.type === 'file') {
+    const file = fileInput.files[0];
+    if (file && file.size > 1048576) { // 1 MB
+      alert('File size must be less than 1 MB!');
+      fileInput.value = ''; // Reset the file input
+      return;
+    }
+    // Check file type
+    if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
+      alert('Only JPEG (JPG) or PNG image files are allowed!');
+      fileInput.value = ''; // Reset the file input
+      return;
+    }
+  }
+});
+
 
   listingAddForm.addEventListener('submit', function (event) {
       // Check if the form is valid
