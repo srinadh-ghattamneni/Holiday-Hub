@@ -1,28 +1,24 @@
-
-
- <% layout("/layouts/boilerplate") %>
+<% layout("/layouts/boilerplate") %>
 
 <div class="container-fluid mt-5">
     <div class="row justify-content-center">
-        <div class=" col-xl-5 col-lg-5 col-md-6 col-sm-8  border rounded p-4 shadow-sm bg-light">
+        <div class="col-xl-5 col-lg-5 col-md-6 col-sm-8 border rounded p-4 shadow-sm bg-light">
             <h1 class="text-center mb-4">Login</h1>
-            <form action="/login" method="POST" class="needs-validation " novalidate>
+            <form action="/login" method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
-                    <label for="username" class="form-label">User Name</label>
-                    <input name="username" id="username"  placeholder="Enter your username"  
-                    minlength="4" maxlength="60" type="text" class="form-control" required />
+                    <label for="username" class="form-label">Username</label>
+                    <input name="username" id="username" placeholder="Enter your username"
+                        minlength="4" maxlength="30" pattern="^[a-zA-Z0-9 ]+$" type="text" class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">Please enter a valid user name!</div>
+                    <div class="invalid-feedback">Please enter a valid username (letters, numbers, and spaces only)!</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input name="password" id="password" type="password" placeholder="Enter your password" 
-                    minlength="5"
-                    maxlength="60"
-                    pattern="(?=.*\d).{5,60}" class="form-control" required />
+                    <input name="password" id="password" type="password" placeholder="Enter your password"
+                        minlength="8" maxlength="60" pattern="^(?=.*[a-zA-Z])(?=.*[0-9]).+$" class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">Please enter a valid password !</div>
+                    <div class="invalid-feedback">Password must be at least 8 characters long !</div>
                 </div>
 
                 <div class="text-center">
@@ -32,10 +28,7 @@
                 <div class="text-center mt-3">
                     <a href="/forgot-password" class="text-decoration-none">Forgot Password?</a>
                 </div>
-                
-
             </form>
         </div>
     </div>
 </div>
-

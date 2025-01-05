@@ -1,46 +1,37 @@
 <% layout("/layouts/boilerplate") %>
 
 <div class="container-fluid mt-5">
-    <div class="row justify-content-center">
-        <div class="col-xl-5 col-lg-5 col-md-6 col-sm-8 border rounded p-4 shadow-sm bg-light">
-            <h1 class="text-center mb-4">Sign Up </h1>
+    <div class="row justify-content-center col-sm-12">
+        <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 border rounded p-4 shadow-sm bg-light">
+            <h1 class="text-center mb-4">Sign Up</h1>
             <form id="signupForm" action="/signup" method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
-                    <label for="username" class="form-label">User Name</label>
-                    <input name="username" id="username" type="text"  
-                    minlength="4" 
-                    maxlength="60"
-                    placeholder="Enter your username"
-                    class="form-control" required />
+                    <label for="username" class="form-label">Username</label>
+                    <input name="username" id="username" type="text" minlength="4" maxlength="30"
+                        pattern="^[a-zA-Z0-9 ]+$" placeholder="Enter your username" class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">Username must be at least 4 characters long !</div>
+                    <div class="invalid-feedback">Username must be at least 4 characters long and only contain letters, numbers, and spaces!</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input name="email" id="email" type="email" 
-                    placeholder="Enter your email"
-                    maxlength="60"
-                     pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
-                     class="form-control" required />
+                    <input name="email" id="email" type="email" maxlength="60" placeholder="Enter your email"
+                        class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">Please enter a valid email !</div>
+                    <div class="invalid-feedback">Please enter a valid email!</div>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input name="password" id="password" type="password"
-                    minlength="5"
-                    maxlength="60"
-                    pattern="(?=.*\d).{5,60}"
-                     placeholder="Create a password (min. 5 characters)"
-                     class="form-control" required />
+                    <input name="password" id="password" type="password" minlength="8" maxlength="60"
+                        pattern="^(?=.*[a-zA-Z])(?=.*[0-9]).+$" placeholder="Create a password (min. 8 characters)"
+                        class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">The password must be at least 5 characters long and include at least one digit !</div>
+                    <div class="invalid-feedback">The password must be at least 8 characters long and include at least one letter and one digit!</div>
                 </div>
 
                 <div class="text-center">
-                    <button  id="resetSignupBtn" class="btn btn-success signup-btn" type="submit">Sign Up</button>
+                    <button id="resetSignupBtn" class="btn btn-success signup-btn" type="submit">Sign Up</button>
                 </div>
             </form>
         </div>

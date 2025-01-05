@@ -1,95 +1,111 @@
 <% layout("/layouts/boilerplate") %>
 
- 
-    <div class="row">
-      <div class="col-8 offset-2">
+<div class="container mt-4 mb-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 border rounded p-4 shadow-sm bg-light">
 
+      <h1 class="text-center mb-4">Create a New Listing</h1>
+      <form method="POST" id="listingAddForm" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
 
-        <h1 class="mt-3">Create a New Listing</h1>
-        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
-
-          <div class="mb-4 mt-2">
-            <label for="title" class="form-label fs-5">Title</label>
-            <input name="listing[title]" placeholder="Enter a catchy title" maxlength="100" type="text" class="form-control" required />
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Please Enter a Title!
-            </div>
+        <div class="mb-4 mt-2">
+          <label for="title" class="form-label fs-5">Title</label>
+          <input name="listing[title]" placeholder="Enter a catchy title" maxlength="60" type="text" class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
           </div>
-
-          <div class="mb-4">
-            <label for="description" class="form-label fs-5">Description</label>
-            <textarea name="listing[description]" class="form-control" placeholder="Enter some description" rows="3" maxlength="600"
-              required></textarea>
-
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Please enter a short description!
-            </div>
+          <div class="invalid-feedback">
+            Please Enter a Title!
           </div>
+        </div>
 
-        
-          <div class="mb-4">
-            <label for="image" class="form-label fs-5">Upload Listing Image</label>
-            <input name="listing[image][url]"  
-            type="file" class="form-control"  />
+        <div class="mb-4">
+          <label for="description" class="form-label fs-5">Description</label>
+          <textarea name="listing[description]" class="form-control" placeholder="Enter some description" rows="3" maxlength="600" required></textarea>
+          <div class="valid-feedback">
+            Looks good!
           </div>
-          
-
-          <div class="mb-4">
-            <label for="price" class="form-label fs-5">Price</label>
-            <input name="listing[price]" placeholder="Enter price" type="number"  min="1" max="100000000"  class="form-control" required />
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Price should be valid!
-            </div>
-
+          <div class="invalid-feedback">
+            Please enter a short description!
           </div>
+        </div>
 
-          <div class="mb-4">
-            <label for="country" class="form-label fs-5">Country</label>
-            <input name="listing[country]" placeholder="Enter country" type="text" maxlength="100"  class="form-control" required />
+        <div class="mb-4">
+          <label for="image" class="form-label fs-5">Upload Listing Image</label>
+          <input name="listing[image][url]" type="file" class="form-control" />
+        </div>
 
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Country should be valid!
-            </div>
+        <div class="mb-4">
+          <label for="price" class="form-label fs-5">Price</label>
+          <input name="listing[price]" placeholder="Enter price" type="number" min="1" max="100000000" class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
           </div>
-
-
-          <div class="mb-4">
-            <label for="location" class="form-label fs-5">Location</label>
-            <input name="listing[location]" placeholder="Enter address of the listing"
-             pattern="^[A-Za-z0-9\s,.'-]+$" 
-             maxlength="150" type="text" class="form-control" required />
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Location should be valid!
-            </div>
+          <div class="invalid-feedback">
+            Price should be valid!
           </div>
-          <button class="btn btn-dark mb-3 add-btn ">Add</button>
-        </form>
+        </div>
 
+        <div class="mb-4">
+          <label for="country" class="form-label fs-5">Country</label>
+          <input name="listing[country]" placeholder="Enter country" type="text" maxlength="60" class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Country should be valid!
+          </div>
+        </div>
 
-      </div>
+        <div class="mb-4">
+          <label for="location" class="form-label fs-5">Location</label>
+          <input name="listing[location]" placeholder="Enter address of the listing"  maxlength="100" type="text" class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Location should be valid!
+          </div>
+        </div>
+
+        <button id="listingAddBtn" class="btn btn-dark mb-3 add-btn w-100">Add</button>
+
+      </form>
+
     </div>
+  </div>
+</div>
 
+
+<!-- <script>
+  // JavaScript to disable the button for 5 seconds after it's clicked and submit the form
+  document.getElementById('listing-add-btn').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent default form submission
+    var button = event.target;
+    var form = button.closest('form');  // Get the closest form element
+    button.disabled = true;  // Disable the button
+    form.submit();
+    // Re-enable the button after 5 seconds
+    setTimeout(function() {
+      button.disabled = false;  // Enable the button after 5 seconds
+    }, 5000);
+  });
+</script> -->
+
+<script>
+  const listingAddBtn = document.getElementById('listingAddBtn');
+  const listingAddForm = document.getElementById('listingAddForm');
+
+  listingAddForm.addEventListener('submit', function (event) {
+      // Check if the form is valid
+      if (!listingAddForm.checkValidity()) {
+          event.preventDefault(); // Prevent form submission if invalid
+          event.stopPropagation(); // Stop further event propagation
+      } else {
+        listingAddBtn.disabled = true; // Disable the button
+        listingAddBtn.textContent = 'Processing...'; // Change button text
+      }
+
+      // Add validation classes
+      listingAddForm.classList.add('was-validated');
+  });
+</script>

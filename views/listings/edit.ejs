@@ -1,103 +1,101 @@
 <% layout("/layouts/boilerplate") %>
 
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 border rounded p-4 shadow-sm bg-light">
 
+      <h1 class="text-center mb-4 mt-4">Edit your Listing</h1>
+      <form method="POST" id="listingEditForm" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
 
-    <div class="row">
-      <div class="col-8 offset-2">
-
-        <h1 class="mb-4 mt-4">Edit your Listing</h1>
-        <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
-
-          <div class="mb-4">
-            <label for="title" class="form-label fs-5">Title</label>
-            <input name="listing[title]" value="<%= listing.title %>" type="text"  maxlength="100" class="form-control" required />
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Please Enter a Title!
-            </div>
-
+        <div class="mb-4">
+          <label for="title" class="form-label fs-5">Title</label>
+          <input name="listing[title]" value="<%= listing.title %>" type="text" maxlength="60" class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
           </div>
-
-          <div class="mb-4">
-            <label for="description" class="form-label fs-5">Description</label>
-            <textarea name="listing[description]" class="form-control"  rows="3" maxlength="600"
-             required><%= listing.description %></textarea>
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Please enter a short description!
-            </div>
-
+          <div class="invalid-feedback">
+            Please Enter a Title!
           </div>
+        </div>
 
-
-          <div class="mb-4">
-            <p class="fs-5">Original Image</p>
-            <img style="height: 30vh; " src="<%= originalImageUrl %>">
+        <div class="mb-4">
+          <label for="description" class="form-label fs-5">Description</label>
+          <textarea name="listing[description]" class="form-control" rows="3" maxlength="600" required><%= listing.description %></textarea>
+          <div class="valid-feedback">
+            Looks good!
           </div>
-
-          <div class="mb-4">
-            <label for="image" class="form-label fs-5">Upload New Image</label>
-            <input name="listing[image][url]"  type="file" class="form-control" />
-
+          <div class="invalid-feedback">
+            Please enter a short description!
           </div>
+        </div>
 
-
-          <div class="mb-4">
-            <label for="price" class="form-label fs-5">Price</label>
-            <input name="listing[price]" value="<%= listing.price %>" type="number"   min="1" max="100000000"  class="form-control"  required/>
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Price should be valid!
-            </div>
-
+        <div class="mb-4">
+          <p class="fs-5">Original Image</p>
+          <div class="d-flex justify-content-center">
+            <img class="img-fluid" style="max-height: 50vh; width: 100%;" src="<%= originalImageUrl %>">
           </div>
+        </div>
 
-          <div class="mb-4">
-            <label for="country" class="form-label fs-5">Country</label>
-            <input name="listing[country]" value="<%= listing.country %>" type="text"  maxlength="100" class="form-control"  required />
+        <div class="mb-4">
+          <label for="image" class="form-label fs-5">Upload New Image</label>
+          <input name="listing[image][url]" type="file" class="form-control" />
+        </div>
 
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Country should be valid!
-            </div>
-
+        <div class="mb-4">
+          <label for="price" class="form-label fs-5">Price</label>
+          <input name="listing[price]" value="<%= listing.price %>" type="number" min="1" max="100000000" class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
           </div>
-
-          <div class="mb-4">
-            <label for="location" class="form-label fs-5">Location</label>
-            <input name="listing[location]" value="<%= listing.location %>" type="text"
-             placeholder="Enter address of the listing" pattern="^[A-Za-z0-9\s,.'-]+$" class="form-control"   required/>
-
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-
-            <div class="invalid-feedback">
-              Location should be valid!
-            </div>
-
+          <div class="invalid-feedback">
+            Price should be valid!
           </div>
+        </div>
 
+        <div class="mb-4">
+          <label for="country" class="form-label fs-5">Country</label>
+          <input name="listing[country]" value="<%= listing.country %>" type="text" maxlength="100" class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Country should be valid!
+          </div>
+        </div>
 
-          <button class="btn btn-dark edit-btn mb-4">Edit</button>
-        </form>
+        <div class="mb-4">
+          <label for="location" class="form-label fs-5">Location</label>
+          <input name="listing[location]" value="<%= listing.location %>" type="text" placeholder="Enter address of the listing"  class="form-control" required />
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Location should be valid!
+          </div>
+        </div>
 
-      </div>
+        <button id="listingEditBtn" class="btn btn-dark edit-btn mb-4 w-100">Edit</button>
+      </form>
+
     </div>
+  </div>
+</div>
 
- 
+<script>
+  const listingEditBtn = document.getElementById('listingEditBtn');
+  const listingEditForm = document.getElementById('listingEditForm');
+
+  listingEditForm.addEventListener('submit', function (event) {
+      // Check if the form is valid
+      if (!listingEditForm.checkValidity()) {
+          event.preventDefault(); // Prevent form submission if invalid
+          event.stopPropagation(); // Stop further event propagation
+      } else {
+        listingEditBtn.disabled = true; // Disable the button
+        listingEditBtn.textContent = 'Processing...'; // Change button text
+      }
+
+      // Add validation classes
+      listingEditForm.classList.add('was-validated');
+  });
+</script>

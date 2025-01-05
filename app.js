@@ -14,7 +14,6 @@ const flash=require("connect-flash");
 const passport=require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-const { isLoggedIn } = require("./middleware.js");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const UserRouter = require("./routes/user.js");
@@ -43,7 +42,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // sessions
 const sessionOptions={
-  secret:"mysupersecretcode",
+  secret:process.env.SESSION_SECRET,
   resave:false,
   saveUninitialized: true,
   cookie:{
@@ -70,8 +69,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-
-
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error=req.flash("error");
@@ -88,10 +85,10 @@ app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page not Found !"));
 });
 
+// custom error handler
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "something went wrong !" } = err;
   res.status(statusCode).render("error.ejs", { err });
-  // res.status(statusCode).send(message);
 });
 
 app.listen(8080, () => {

@@ -12,6 +12,7 @@ module.exports.renderSignupForm = (req, res) => {
 module.exports.signup = async (req, res) => {
   try {
     let { username, email, password } = req.body;
+    email = email.trim(); // Trim email before further processing
     const newUser = new User({ email, username });
     const registeredUser = await User.register(newUser, password);
 
@@ -22,14 +23,13 @@ module.exports.signup = async (req, res) => {
 
     await registeredUser.save();
 
-    //  Send OTP via email in HTML format
+    // Send OTP via email in HTML format
     const verificationCodeHtml = `
      <p>Your OTP is: <strong>${otp}</strong></p>
      <p>Please enter this code to verify your email address. This code will expire in 5 minutes.</p> `;
     await sendEmail(email, "Welcome to Wanderlust - Verify Your Email",
       "Please verify your email using the OTP.", verificationCodeHtml);
     req.flash("success", "OTP sent to your email.");
-    //res.redirect("/verify-otp");
     res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`); // Pass email as query parameter
 
   } catch (e) {
@@ -40,7 +40,13 @@ module.exports.signup = async (req, res) => {
 
 module.exports.renderOtpForm = async (req, res) => {
   const { email } = req.query;
-  const user = await User.findOne({ email });
+ 
+  if(!email){
+    req.flash("error", "Email and OTP are required.");
+    return res.redirect("/signup");
+  }
+  const trimmedEmail = email.trim();
+  const user = await User.findOne({ email: trimmedEmail });
 
   let cooldown = 0;
   if (user && user.lastOtpSent) {
@@ -49,7 +55,7 @@ module.exports.renderOtpForm = async (req, res) => {
       cooldown = Math.ceil((COOLDOWN_PERIOD - timeElapsed) / 1000);
     }
   }
-  res.render("users/verifyOtp.ejs", { email, cooldown });
+  res.render("users/verifyOtp.ejs", { email: trimmedEmail, cooldown });
 };
 
 module.exports.verifyOtp = async (req, res, next) => {
@@ -60,28 +66,28 @@ module.exports.verifyOtp = async (req, res, next) => {
     return res.redirect("/signup");
   }
 
-  const user = await User.findOne({ email });
+  const trimmedEmail = email.trim(); // Trim email for consistency
+  const user = await User.findOne({ email: trimmedEmail });
 
   if (!user) {
     req.flash("error", "Invalid email.");
-    return res.render("users/verifyOtp.ejs", { email, cooldown: 60 });
+    return res.render("users/verifyOtp.ejs", { email: trimmedEmail, cooldown: 60 });
   }
 
   if (!user.otp || user.otp.trim() !== otp.trim() || user.otpExpires < Date.now()) {
     req.flash("error", "Invalid or expired OTP.");
 
-    let cooldown = 0 ;
+    let cooldown = 0;
     if (user.lastOtpSent) {
       const timeElapsed = Date.now() - user.lastOtpSent;
       if (timeElapsed < COOLDOWN_PERIOD) {
         cooldown = Math.ceil((COOLDOWN_PERIOD - timeElapsed) / 1000);
-
       }
     }
 
-    return res.render("users/verifyOtp.ejs", { email, cooldown });
+    return res.render("users/verifyOtp.ejs", { email: trimmedEmail, cooldown });
   }
-// Clear OTP and verify email
+  // Clear OTP and verify email
   user.otp = undefined;
   user.otpExpires = undefined;
   user.emailVerified = true;
@@ -97,7 +103,6 @@ module.exports.verifyOtp = async (req, res, next) => {
   });
 };
 
-
 module.exports.resendOtp = async (req, res) => {
   const { email } = req.body;
 
@@ -106,7 +111,8 @@ module.exports.resendOtp = async (req, res) => {
     return res.redirect("/signup");
   }
 
-  const user = await User.findOne({ email });
+  const trimmedEmail = email.trim(); // Trim email here as well
+  const user = await User.findOne({ email: trimmedEmail });
 
   if (!user) {
     req.flash("error", "No user found with this email.");
@@ -126,7 +132,7 @@ module.exports.resendOtp = async (req, res) => {
         (COOLDOWN_PERIOD - (now - user.lastOtpSent)) / 1000
       )} seconds before requesting another OTP.`
     );
-    return res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
+    return res.redirect(`/verify-otp?email=${encodeURIComponent(trimmedEmail)}`);
   }
 
   // Generate a new OTP
@@ -141,15 +147,14 @@ module.exports.resendOtp = async (req, res) => {
       <p>Please enter this code to verify your email address. This code will expire in 5 minutes.</p>
     `;
   await sendEmail(
-    email,
+    trimmedEmail,
     "Resend OTP - Wanderlust",
     "Here is your new OTP.",
     verificationCodeHtml
   );
 
   req.flash("success", "A new OTP has been sent to your email.");
-  res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
-
+  res.redirect(`/verify-otp?email=${encodeURIComponent(trimmedEmail)}`);
 };
 
 
@@ -159,91 +164,89 @@ module.exports.renderLoginForm = (req, res) => {
 
 
 module.exports.renderForgotPasswordForm = (req, res) => {
-    res.render("users/forgotPassword.ejs");
+  res.render("users/forgotPassword.ejs");
 };
 
 module.exports.forgotPassword = async (req, res) => {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-        req.flash("error", "No account with that email exists.");
-        return res.redirect("/forgot-password");
-    }
+  const { email } = req.body;
+  const trimmedEmail = email.trim(); // Trim email here as well
+  const user = await User.findOne({ email: trimmedEmail });
+  
+  if (!user) {
+    req.flash("error", "No account with that email exists.");
+    return res.redirect("/forgot-password");
+  }
 
-    // Generate reset token
-    const resetToken = crypto.randomBytes(20).toString("hex");
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-    await user.save();
+  // Generate reset token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+  await user.save();
 
-    // Send email with reset link
-    const resetLink = `${req.protocol}://${req.get("host")}/reset-password/${resetToken}`;
-   
-    const resetEmailHtml = `
+  // Send email with reset link
+  const resetLink = `${req.protocol}://${req.get("host")}/reset-password/${resetToken}`;
+
+  const resetEmailHtml = `
         <p>You requested a password reset.</p>
         <p>Click <a href="${resetLink}">here</a> to reset your password.</p>
         <p>If you did not request this, please ignore this email.</p>
     `;
-    await sendEmail(
-        user.email,
-        "Password Reset Request",
-        "You requested a password reset.",
-        resetEmailHtml
-    );
+  await sendEmail(
+    trimmedEmail,
+    "Password Reset Request",
+    "You requested a password reset.",
+    resetEmailHtml
+  );
 
-    req.flash("success", "An email has been sent with password reset instructions.");
-    res.redirect("/login");
+  req.flash("success", "An email has been sent with password reset instructions.");
+  res.redirect("/login");
 };
 
 module.exports.renderResetPasswordForm = async (req, res) => {
-    const { token } = req.params;
-    const user = await User.findOne({
-        resetPasswordToken: token,
-        resetPasswordExpires: { $gt: Date.now() }
-    });
+  const { token } = req.params;
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
 
-    if (!user) {
-        req.flash("error", "Password reset token is invalid or has expired.");
-        return res.redirect("/forgot-password");
-    }
+  if (!user) {
+    req.flash("error", "Password reset token is invalid or has expired.");
+    return res.redirect("/forgot-password");
+  }
 
-    res.render("users/resetPassword.ejs", { token });
+  res.render("users/resetPassword.ejs", { token });
 };
 
 module.exports.resetPassword = async (req, res) => {
-  try {
-      const user = await User.findOne({
-          resetPasswordToken: req.params.token,
-          resetPasswordExpires: { $gt: Date.now() }, // Check if token is valid
-      });
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() }, // Check if token is valid
+  });
 
-      if (!user) {
-          req.flash('error', 'Password reset token is invalid or has expired.');
-          return res.redirect('/forgot-password');
-      }
-
-      if (req.body.password !== req.body.confirmPassword) {
-          req.flash('error', 'Passwords do not match.');
-          return res.redirect('back');
-      }
-
-      // Hash new password
-      user.setPassword(req.body.password, async (err) => {
-          if (err) {
-              req.flash('error', 'Error setting new password.');
-              return res.redirect('back');
-          }
-          user.resetPasswordToken = undefined;
-          user.resetPasswordExpires = undefined;
-          await user.save();
-
-          req.flash('success', 'Your password has been updated.');
-          res.redirect('/login');
-      });
-  } catch (err) {
-      console.error(err);
-      res.redirect('/forgot-password');
+  if (!user) {
+    req.flash('error', 'Password reset token is invalid or has expired.');
+    return res.redirect('/forgot-password');
   }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    req.flash('error', 'Passwords do not match.');
+    return res.redirect('back');
+  }
+
+  // Hash new password
+  user.setPassword(req.body.password, async (err) => {
+    if (err) {
+      req.flash('error', 'Error setting new password.');
+      return res.redirect('back');
+    }
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    req.flash('success', 'Your password has been updated.');
+    res.redirect('/login');
+  });
+
 };
 
 
