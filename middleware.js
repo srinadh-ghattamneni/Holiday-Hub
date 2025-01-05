@@ -5,6 +5,7 @@ const Review=require("./models/review");
 const User = require("./models/user");
 const Joi = require('joi');
 const { userSchema } = require('./schema');
+const { cloudinary } = require("./cloudConfig");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -59,6 +60,7 @@ module.exports.isOwner= async(req,res, next)=>{
 module.exports.validateListing = (req, res, next) => {
     const { error } = listingSchema.validate(req.body);
     if (error) {
+      cloudinary.uploader.destroy(req.body.listing.image.filename, { invalidate: true });
       const errMsg = error.details.map((el) => el.message).join(", ");
       throw new ExpressError(400, errMsg);
     } else {

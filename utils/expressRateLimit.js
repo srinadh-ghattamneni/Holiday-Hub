@@ -10,8 +10,7 @@ const customRateLimiter = (windowMs, max, message) => {
         handler: (req, res, next) => {
             const error = new ExpressError(429, message);
             next(error);
-        },
-        skipSuccessfulRequests: true, // Tracks only failed attempts
+        }
     });
 };
 

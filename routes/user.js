@@ -9,11 +9,11 @@ const customRateLimiter = require("../utils/expressRateLimit.js");
 
 // Create rate limiters using customRateLimiter
 const loginRateLimiter = customRateLimiter(15 * 60 * 1000, 30, "Too many login attempts, please try again later.");
-const signupRateLimiter = customRateLimiter(15 * 60 * 1000,20,"Too many signup attempts, please try again later.");
-const resendOtpRateLimiter = customRateLimiter(10 * 60 * 1000,10,"Too many OTP resend attempts, please try again later.");
-const verifyOtpRateLimiter = customRateLimiter(5 * 60 * 1000,30,"Too many OTP verification attempts, please try again later.");
+const signupRateLimiter = customRateLimiter(15 * 60 * 1000,30,"Too many signup attempts, please try again later.");
+const resendOtpRateLimiter = customRateLimiter(10 * 60 * 1000,20,"Too many OTP resend attempts, please try again later.");
+const verifyOtpRateLimiter = customRateLimiter(10 * 60 * 1000,30,"Too many OTP verification attempts, please try again later.");
 const forgotPasswordRateLimiter = customRateLimiter(10 * 60 * 1000,30,"Too many forgot password attempts, please try again later.");
-const resetPasswordRateLimiter = customRateLimiter(10 * 60 * 1000,20,"Too many reset password attempts, please try again later.");
+const resetPasswordRateLimiter = customRateLimiter(10 * 60 * 1000,10,"Too many reset password attempts, please try again later.");
 
 router.route("/signup")
   // Signup route (GET)

@@ -4,14 +4,19 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const { isLoggedIn ,isOwner,validateListing,clearRedirectUrl} = require("../middleware.js");
 const listingController =require("../controllers/listings.js");
-
+const customRateLimiter = require("../utils/expressRateLimit"); // Import rate limiter
 const { upload } = require("../cloudConfig.js");
+
+// Apply rate limiter to certain routes
+const listingRateLimiter = customRateLimiter(15 * 60 * 1000,30,
+   "Too many requests, please try again later."); // 15 minutes window, max 40 requests
+
 
 router.route("/")
 //Index Route
 .get(clearRedirectUrl,wrapAsync(listingController.index))
   // Create Route modifed to accept the correct image format 
-.post(isLoggedIn,
+.post(isLoggedIn,listingRateLimiter,
   upload.single('listing[image][url]'),
   validateListing,
    wrapAsync(listingController.createListing));
@@ -24,13 +29,13 @@ router.route("/:id")
  // Show Route with reviews
  .get(wrapAsync(listingController.showListing))
     // Update Route modifed to correctly store the image as object
-.put( isLoggedIn,isOwner,
+.put( isLoggedIn,isOwner,listingRateLimiter,
   upload.single('listing[image][url]'),
   validateListing, wrapAsync(listingController.updateListing))
   //Delete Route
 .delete(isLoggedIn,isOwner, wrapAsync(listingController.deleteListing));
 
   //Edit Route
-  router.get("/:id/edit", isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm));
+  router.get("/:id/edit", isLoggedIn,isOwner,listingRateLimiter,wrapAsync(listingController.renderEditForm));
   
   module.exports = router;
