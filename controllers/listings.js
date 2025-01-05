@@ -115,3 +115,23 @@ module.exports.deleteListing = async (req, res) => {
   req.flash("success", "Listing Deleted Successfully!");
   res.redirect("/listings");
 }
+
+module.exports.searchListings = async (req, res) => {
+  const searchQuery = req.query['listing-search'];
+  if (!searchQuery) {
+    return res.redirect('/listings');  // Redirect to listings page if search is empty
+  }
+
+  // Search listings by title, description, or country
+  const searchRegex = new RegExp(searchQuery, 'i'); // Case-insensitive search
+  const allListings = await Listing.find({
+    $or: [
+      { title: { $regex: searchRegex } },
+      { description: { $regex: searchRegex } },
+      { country: { $regex: searchRegex } },
+      { location: { $regex: searchRegex } } ,
+    ]
+  });
+
+  res.render('listings/index', { allListings });  // Pass the results to your view
+};

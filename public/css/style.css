@@ -319,3 +319,20 @@ login ad signup pages */
   .navbar>.container-fluid { 
     background-color: white!important ;
   }
+
+/* search message  */
+  .no-listings-message {
+    text-align: center !important;
+    width: 100% !important;
+    padding: 50px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 200px !important; /* Ensure the message is vertically centered */
+  }
+  
+  .no-listings-message p {
+    font-size: 2.5rem !important;
+    color: #777;
+  }
+  

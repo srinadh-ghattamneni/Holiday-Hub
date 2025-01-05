@@ -2,8 +2,11 @@ const mongoose = require("mongoose");
 const initData = require("./data.js");
 const User = require("../models/user.js");  // Assuming the User model is in the correct path
 const Listing = require("../models/listing.js");
+if(process.env.NODE_ENV != "production")
+  {
+    require('dotenv').config({ path: '../.env' }); // Adjust the path if index.js is in a subfolder
+  }
 
-require('dotenv').config({ path: '../.env' }); // Adjust the path if index.js is in a subfolder
 
 const MONGO_URL = process.env.MONGO_URL;
 

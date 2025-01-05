@@ -1,6 +1,9 @@
 const nodemailer = require("nodemailer");
-require('dotenv').config({ path: '../.env' }); // Adjust the path 
-
+ 
+if(process.env.NODE_ENV != "production")
+  {
+    require('dotenv').config({ path: '../.env' }); // Adjust the path
+  }
       const transporter = nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
         port: parseInt(process.env.EMAIL_PORT, 10), // Convert port to an integer

@@ -17,6 +17,7 @@ const User = require("./models/user.js");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const UserRouter = require("./routes/user.js");
+require('./utils/nodeCron');
 const MONGO_URL = process.env.MONGO_URL
 
 main()
@@ -75,9 +76,12 @@ app.get("/", (req, res) => {
   res.redirect("/listings"); // Redirects to the "All Listings" page
 });
 
+app.get('/search', listingRouter);
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",UserRouter);
+// Route to handle search functionality
+
 
 
 app.all("*", (req, res, next) => {

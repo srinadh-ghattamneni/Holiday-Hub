@@ -13,11 +13,18 @@
       </div>
 
       <div class="navbar-nav ms-auto ">
-        <form class="form-inline d-flex">
-          <input class="form-control  me-2 input-search fs-5" type="search"  name="listing-search" maxlength="50" placeholder="Search Destinations " aria-label="Search">
-          <button class="btn  btn-outline-success  me-2 search-btn" type="submit">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>&nbsp;Search</button>
-        </form>
+        <form class="form-inline d-flex" action="/search" method="GET">
+
+          <input class="form-control me-2 input-search fs-5" type="search"
+          pattern="[A-Za-z0-9\s]+" name="listing-search" maxlength="50"
+           placeholder="Search Destinations"  title="Only alphabets, numbers, and spaces are allowed." 
+            aria-label="Search">
+
+          <button class="btn btn-outline-success me-2 search-btn" type="submit">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>&nbsp;Search
+          </button>
+      </form>
+      
       </div>
       
       <div class="navbar-nav ms-auto">

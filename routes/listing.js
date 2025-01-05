@@ -5,10 +5,17 @@ const { isLoggedIn ,isOwner,validateListing,clearRedirectUrl} = require("../midd
 const listingController =require("../controllers/listings.js");
 const customRateLimiter = require("../utils/expressRateLimit"); // Import rate limiter
 const { upload } = require("../cloudConfig.js");
+const Listing = require("../models/listing");
 
 // Apply rate limiter to certain routes
 const listingRateLimiter = customRateLimiter(15 * 60 * 1000,30,
    "Too many requests, please try again later."); // 15 minutes window, max 40 requests
+
+const searchRateLimiter = customRateLimiter(20* 60 * 1000,100,
+    "Too many requests, please try again later."); 
+
+// Add rate limiting to the search route
+router.get('/search', searchRateLimiter , wrapAsync(listingController.searchListings));
 
 
 router.route("/")
