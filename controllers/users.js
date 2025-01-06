@@ -252,7 +252,7 @@ module.exports.resetPassword = async (req, res) => {
 
 // actually afterLogin, coz login is done by passport
 module.exports.login = async (req, res) => {
-  req.flash("success", "You are logged in!");
+  req.flash("success", "You are logged in Successfully !");
   const redirectUrl = res.locals.redirectUrl || "/listings"; // Fallback to /listings if no redirect URL
 
   res.redirect(redirectUrl);
@@ -263,7 +263,7 @@ module.exports.logout = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    req.flash("success", "Logged out Successfully!");
+    req.flash("success", "Logged out Successfully !");
     res.redirect("/listings");
   });
 }

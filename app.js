@@ -10,6 +10,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session =require("express-session");
+const MongoStore = require('connect-mongo');
+
 const flash=require("connect-flash");
 const passport=require("passport");
 const LocalStrategy = require("passport-local");
@@ -29,7 +31,11 @@ main()
   });
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  try {
+    await mongoose.connect(MONGO_URL);
+  } catch (err) {
+    console.log("Error connecting to database ");
+  }
 }
 
 app.set("view engine", "ejs");
@@ -41,14 +47,25 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 
+const store = MongoStore.create({
+  mongoUrl: process.env.MONGO_URL,
+  ttl: 60 * 60 * 1000,
+  touchAfter: 30 * 60 * 1000,
+});
+
+store.on("error", (err) => {
+  console.error("Error in mongo session store:", err);
+});
+
 // sessions
 const sessionOptions={
+  store: store,
   secret:process.env.SESSION_SECRET,
   resave:false,
   saveUninitialized: true,
   cookie:{
-    expires: Date.now() +30*60*1000,
-    maxAge:5*60*1000,
+    expires: Date.now() + 60 * 60 * 1000,
+    maxAge: 60 * 60 * 1000,//1hr
     httpOnly:true,
   }
 };
@@ -95,6 +112,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { err });
 });
 
-app.listen(8080, () => {
+app.listen(process.env.PORT || 8080, () => {
   console.log("server is listening to port 8080");
 });

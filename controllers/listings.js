@@ -96,7 +96,7 @@ module.exports.updateListing = async (req, res) => {
     await currentListing.save();
   }
 
-  req.flash("success", "Listing Updated Successfully !")
+  req.flash("success", "Listing Updated Successfully !");
   res.redirect(`/listings/${id}`);
 }
 
@@ -112,7 +112,7 @@ module.exports.deleteListing = async (req, res) => {
     await cloudinary.uploader.destroy(deletedListing.image.filename, { invalidate: true });
   }
 
-  req.flash("success", "Listing Deleted Successfully!");
+  req.flash("success", "Listing Deleted Successfully !");
   res.redirect("/listings");
 }
 

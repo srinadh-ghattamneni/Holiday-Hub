@@ -1,9 +1,9 @@
 const cron = require('node-cron');
 const User = require('../models/user.js'); // Adjust the path to your user model as needed
-cron.schedule('0 0 * * *', async () => {  // This runs at midnight every day
+cron.schedule('0 0 * * 0', async () => {   // This runs at midnight every Sunday
     try {
         const now = new Date();
-        const threshold = 1 * 24 * 60 * 60 * 1000; // 1 day in milliseconds
+        const threshold = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 
         // Find users who haven't verified their email and are older than 1 day
         const usersToDelete = await User.find({
