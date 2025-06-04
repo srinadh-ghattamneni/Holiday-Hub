@@ -27,7 +27,7 @@ module.exports.signup = async (req, res) => {
     const verificationCodeHtml = `
      <p>Your OTP is: <strong>${otp}</strong></p>
      <p>Please enter this code to verify your email address. This code will expire in 5 minutes.</p> `;
-    await sendEmail(email, "Welcome to Wanderlust - Verify Your Email",
+    await sendEmail(email, "Welcome to Holiday Hub - Verify Your Email",
       "Please verify your email using the OTP.", verificationCodeHtml);
     req.flash("success", "OTP sent to your email.");
     res.redirect(`/verify-otp?email=${encodeURIComponent(email)}`); // Pass email as query parameter
@@ -98,7 +98,7 @@ module.exports.verifyOtp = async (req, res, next) => {
     if (err) {
       return next(err);
     }
-    req.flash("success", "Welcome to Wanderlust!");
+    req.flash("success", "Welcome to Holiday Hub !");
     return res.redirect("/listings");
   });
 };
