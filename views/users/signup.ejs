@@ -10,7 +10,7 @@
                     <input name="username" id="username" type="text" minlength="4" maxlength="30"
                         pattern="^[a-zA-Z0-9 ]+$" placeholder="Enter your username" class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">Username must be at least 4 characters long and only contain letters, numbers, and spaces!</div>
+                    <div class="invalid-feedback">Username must be at least 4 characters long and contain only letters and numbers.</div>
                 </div>
 
                 <div class="mb-3">
@@ -23,11 +23,11 @@
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input name="password" id="password" type="password" minlength="8" maxlength="60"
-                        pattern="^(?=.*[a-zA-Z])(?=.*[0-9]).+$" placeholder="Create a password (min. 8 characters)"
+                    <input name="password" id="password" type="password" minlength="5" maxlength="60"
+                        pattern="^(?=.*[a-zA-Z])(?=.*[0-9]).+$" placeholder="Create a password (min. 5 characters)"
                         class="form-control" required />
                     <div class="valid-feedback">Looks Good!</div>
-                    <div class="invalid-feedback">The password must be at least 8 characters long and include at least one letter and one digit!</div>
+                    <div class="invalid-feedback">The password must be at least 5 characters long and include at least one letter and one digit!</div>
                 </div>
 
                 <div class="text-center">

@@ -26,6 +26,6 @@ module.exports.reviewSchema = Joi.object({
 module.exports.userSchema = Joi.object({
     username: Joi.string().trim().min(4).max(30).pattern(new RegExp('^[a-zA-Z0-9 ]+$')).required(),
     email: Joi.string().email().max(60).required(),
-    password: Joi.string().min(8).max(60).pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9]).+$')).required(),
+    password: Joi.string().min(5).max(60).pattern(new RegExp('^(?=.*[a-zA-Z])(?=.*[0-9]).+$')).required(),
 });
 
