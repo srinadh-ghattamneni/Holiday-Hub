@@ -17,7 +17,7 @@ if(process.env.NODE_ENV != "production")
 
 const sendEmail = async (to, subject, text,verificationCode) => {
   const mailOptions = {
-    from: `"Wanderlust" <${process.env.EMAIL_USERNAME}>`,
+    from: `"Holiday Hub" <${process.env.EMAIL_USERNAME}>`,
     to,
     subject,
     text,
