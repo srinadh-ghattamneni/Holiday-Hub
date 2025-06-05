@@ -1,1 +1,1 @@
-# wanderlust : a travel booking website
+# HolidayHub : a travel booking website
